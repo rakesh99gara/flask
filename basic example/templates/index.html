@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href={{url_for('static',filename='stylesheet/style.css')}}>
-    
+    <script src={{url_for('static',filename='javascript/jquery.js')}}></script>
+
 </head>
+
 <body>
-    
 
+    <script>
+        $(document).ready(function () {
+            alert("hello");
+        });
+    </script>
 
-<div class="box">
-    {% for row in rows: %}
+    <div class="box">
+        {% for row in rows: %}
         <h1>{{row.user_name}}</h1>
-    {%endfor%}
-</div>
+        {%endfor%}
+    </div>
 </body>
+
 </html>
