@@ -8,7 +8,7 @@ body {
 }
 
 #content-div {
-    margin-left: 200px;
+    margin-left: 300px;
 }
 
 .container {
@@ -37,6 +37,8 @@ label {
     height: 290px;
     width: 320px;
     padding: 20px;
+    background-color: rgb(238, 237, 237);
+
 }
 
 .signup-div h1 {
@@ -51,6 +53,38 @@ label {
     border-radius: 5px;
 }
 
+.session {
+    color: rgb(85, 83, 83);
+    font-weight: 100;
+    flex: 1;
+    text-align: center;
+    padding-bottom: 0px
+}
+
+.list {
+    justify-content: space-around;
+    flex: 8;
+
+}
+
+.list ul {
+    list-style: none;
+}
+
+.list ul a {
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.blog {
+    padding: 5vh;
+    text-align: center;
+    flex: 1;
+}
+
+.blog h4 a {
+    letter-spacing: 1.5px;
+}
 
 /**
     * Sidebar CSS
@@ -58,6 +92,15 @@ label {
 #sidebar {
     background-color: #E57373;
     padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+#sidebar h4 a {
+    text-decoration: none;
+    color: white
 }
 
 @media (min-width: 768px) {
@@ -65,7 +108,7 @@ label {
         position: fixed;
         top: 0;
         bottom: 0;
-        width: 180px;
+        width: 300px;
         height: 100%;
         padding-top: 30px;
     }

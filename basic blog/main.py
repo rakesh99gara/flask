@@ -38,11 +38,13 @@ def start_session():
                 # session['username'] = account['username']
                 # Redirect to home page
                 msg = "Login successfull"
+                return redirect(url_for('index'))
+
         else:
             # Account doesnt exist or username/password incorrect
             msg = "Incorrect username/password!"
     # Show the login form with message (if any)
-    return redirect(url_for('index',msg=msg,**request.args))
+            return render_template('login.html',msg = msg)
 
 
 @app.route("/signup")
@@ -65,8 +67,8 @@ def register_user():
             cursor = conn.cursor()
             cursor.execute(sql, data)
             conn.commit()
-            flash("User added successfully!!")
-            return redirect("/")
+            msg = "SignUp successfull. Login to proceed"
+            return render_template('login.html',msg=msg)
     except Exception as e:
         print(e)
     finally:
@@ -81,7 +83,7 @@ def index():
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT * FROM posts")
+        cursor.execute("SELECT posts.id, posts.title, posts.content, posts.user_id, users.email FROM posts INNER JOIN users ON posts.user_id = users.id")
         rows = cursor.fetchall()
         return render_template("index.html", rows=rows)
     except Exception as e:
@@ -93,7 +95,11 @@ def index():
 
 @app.route("/new")
 def create_post():
-    return render_template("create_post.html")
+    if session['loggedin']:
+        return render_template("create_post.html")
+    else:
+        return render_template('login.html',msg="Login to proceed")
+
 
 
 @app.route("/post", methods=["POST"])
@@ -104,8 +110,8 @@ def post():
         _title = request.form["title"]
         _content = request.form["content"]
         if _title and _content and request.method == "POST":
-            sql = "INSERT INTO posts(title,content) VALUES (%s, %s)"
-            data = (_title, _content)
+            sql = "INSERT INTO posts(title,content,user_id) VALUES (%s, %s, %s)"
+            data = (_title, _content, session['id'])
             conn = mysql.connect()
             cursor = conn.cursor()
             cursor.execute(sql, data)
@@ -118,26 +124,96 @@ def post():
         cursor.close()
         conn.close()
 
+@app.route("/post_comment/<int:post_id>", methods=["POST"])
+def post_comment(post_id):
+    conn = None
+    cursor = None
+    try:
+        _name = request.form["name"]
+        _comment = request.form["comment"]
+        if _name and _comment and request.method == "POST":
+            sql = "INSERT INTO comments(name,comment,post_id,user_id) VALUES (%s, %s, %s, %s)"
+            data = (_name, _comment, post_id, session['id'])
+            conn = mysql.connect()
+            cursor = conn.cursor()
+            cursor.execute(sql, data)
+            conn.commit()
+            return redirect(url_for('show',id=post_id))
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
 
 
-def sql_debug(response):
-    queries = list(get_debug_queries())
-    query_str = ''
-    total_duration = 0.0
-    for q in queries:
-        total_duration += q.duration
-        stmt = str(q.statement % q.parameters).replace('\n', '\n       ')
-        query_str += 'Query: {0}\nDuration: {1}ms\n\n'.format(stmt, round(q.duration * 1000, 2))
+@app.route('/show/<int:id>')
+def show(id):
+    conn = None
+    cursor = None
+    try:
+        sql = "SELECT * FROM posts WHERE id = %s"
+        data = (id)
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, data)
+        post = cursor.fetchone()
+        sql = "SELECT * FROM comments where post_id = %s"
+        cursor.execute(sql,data)
+        comments = cursor.fetchall()
+        return render_template('show_post.html',post = post,comments = comments)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
 
-    print('=' * 80)
-    print(' SQL Queries - {0} Queries Executed in {1}ms'.format(len(queries), round(total_duration * 1000, 2)))
-    print('=' * 80)
-    print(query_str.rstrip('\n'))
-    print('=' * 80 + '\n')
+@app.route('/delete_comment/<int:post_id>/<int:comment_id>')
+def delete_comment(post_id,comment_id):
+    conn = None
+    cursor = None
+    try:
+        sql = "DELETE FROM comments where id = %s"
+        data = (comment_id)
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        cursor.execute(sql, data)
+        conn.commit()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+    return redirect(url_for('show',id=post_id))
+    
+    
 
-    return response
+@app.route('/logout')
+def logout():
+    # Remove session data, this will log the user out
+   session.pop('loggedin', None)
+   session.pop('id', None)
+   session.pop('uname', None)
+   # Redirect to login page
+   return redirect(url_for('index'))
 
-app.after_request(sql_debug)    
+# def sql_debug(response):
+#     queries = list(get_debug_queries())
+#     query_str = ''
+#     total_duration = 0.0
+#     for q in queries:
+#         total_duration += q.duration
+#         stmt = str(q.statement % q.parameters).replace('\n', '\n       ')
+#         query_str += 'Query: {0}\nDuration: {1}ms\n\n'.format(stmt, round(q.duration * 1000, 2))
+
+#     print('=' * 80)
+#     print(' SQL Queries - {0} Queries Executed in {1}ms'.format(len(queries), round(total_duration * 1000, 2)))
+#     print('=' * 80)
+#     print(query_str.rstrip('\n'))
+#     print('=' * 80 + '\n')
+
+#     return response
+
+# app.after_request(sql_debug)    
 
 
 

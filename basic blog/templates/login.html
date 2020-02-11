@@ -23,29 +23,20 @@
 </head>
 
 <body>
-    <div id="sidebar">
-        <div class="col-4">SAMPLE BLOG</div>
+    <div id="sidebar" class="col-4">
+        <div class="blog">
+            <h4><a href="/">SAMPLE BLOG</a></h4>
+        </div>
         <div class="list">
             <ul>
                 <li><a href="/login">Login</a></li>
                 <li><a href="/signup">Sign Up</a></li>
-                <li><a href="/new">Create New Post</a></li>
             </ul>
         </div>
     </div>
     <div id="content-div" class="col-12">
         <div class="container">
-            <p>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <ul class=flashes>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-                {% endwith %}
-            </p>
+            <h4>{{msg}}</h4>
             <div class="login-div">
                 <h1>Login Here</h1>
                 <form action="/start_session" method="post">

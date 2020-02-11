@@ -1,7 +1,3 @@
-/**
- * Body CSS
- */
-
 html,
 body {
     height: 100%;
@@ -17,40 +13,43 @@ body {
     margin: 0px 0px 0px 0px
 }
 
-label {
-    font-size: 14px;
-    font-weight: 200;
-}
-
-.sub {
-    margin-top: 3vh;
-}
-
-.container {
-    display: grid;
-    justify-items: center;
-    align-items: center;
-}
-
-.login-div {
-    margin-top: 20%;
-    height: 290px;
-    width: 320px;
-    padding: 20px;
-    background-color: rgb(238, 237, 237);
-
-}
-
-.login-div h1 {
-    font-size: 22px;
-    text-align: center;
-}
-
-.login-div {
+.row {
     box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
         0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
         0 100px 80px rgba(0, 0, 0, 0.07);
+    /* width: auto;
+    height: auto;
     border-radius: 5px;
+    padding: 2vh;
+    margin: 5vh; */
+}
+
+.row {
+    background-color: rgb(238, 237, 237);
+    width: auto;
+    min-height: 8vh;
+    border-radius: 5vh;
+    margin: 5vh;
+    align-items: center;
+    display: flex;
+    padding-left: 5vh;
+}
+
+.comment {
+    flex: 5;
+}
+
+.del {
+    flex: 1
+}
+
+.comments {
+    margin: 5vh;
+}
+
+.comments-form {
+    margin: 5vh;
+    padding: 50px 0px 20px 0px
 }
 
 .session {
@@ -86,9 +85,13 @@ label {
     letter-spacing: 1.5px;
 }
 
-/**
-   * Sidebar CSS
-   */
+.post-head {
+    margin: 5vh;
+    padding: 2vh;
+    text-align: center;
+    color: rgb(149, 149, 149);
+}
+
 #sidebar {
     background-color: #E57373;
     padding: 15px;
