@@ -1,101 +1,76 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href={{url_for('static',filename='show_post.css')}}>
-    <title>Document</title>
-</head>
-
-<body>
-    <div id="sidebar" class="col-4">
-        <div class="blog">
-            <h4><a href="/">SAMPLE BLOG</a></h4>
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="post-head">
+        <h1>{{post[1]}}</h1>
+    </div>
+    <div class="post-body">
+        <p class="drop-cap">{{post[2]}}</p>
+    </div>
+    <div class="whome">
+        <div class='at'><span>Posted at:: <strong>{{post[4]}}</strong></span></div>
+        <div class='by'><span>By:: <strong>{{user[1].split('@')[0]}}</strong></span></div>
+    </div>
+    <hr>
+    {% if session['loggedin']%}
+    {% if session['id'] == post[3] %}
+    <div class="actions">
+        <div class="action-head">
+            <h5>Actions</h5>
         </div>
-        <div class="list">
-            <ul>
-                {% if session['loggedin']%}
-                <li><a href="/new">Create New Post</a></li>
-                <li><a href="/logout">Logout</a></li>
-                {% else%}
-                <li><a href="/login">Login</a></li>
-                <li><a href="/signup">Sign Up</a></li>
-                {%endif%}
-            </ul>
+        <div class="action-buttons">
+            <a href="{{url_for('edit_post',id=post[0])}}">
+                <button type="button" class="btn btn-info btn-sm">Edit</button>
+            </a>
+            <a href="{{url_for('delete_post',id=post[0])}}">
+                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+            </a>
         </div>
-        <div class="session">
+    </div>
+    {% endif %}
+    {% endif %}
+    <div class="comments">
+        <h4>Comments</h4>
+        <hr>
+        {%for comment in comments%}
+        <div class="comment-row">
+            <div class="comment">
+                <h5><strong>{{comment[1]}}::&nbsp;&nbsp;</strong>{{comment[2]}}</h5>
+            </div>
             {% if session['loggedin']%}
-            <p>{{session['uname'].split('@')[0]}}</p>
+            {%if comment[4] == session['id']%}
+            <div class="del">
+                <a href="{{url_for('delete_comment',post_id=comment[3],comment_id=comment[0])}}">
+                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                </a>
+            </div>
+            {%endif%}
             {%endif%}
         </div>
+        {%endfor%}
+        <hr>
     </div>
-    <div id="content-div" class="col-12">
-        <div class="container">
-            <div class="post-head">
-                <h1>{{post[1]}}</h1>
+    <div class="comments-form">
+        <h5>Leave a comment</h5>
+        <hr>
+        {%if session['loggedin']%}
+        <form action="{{url_for('post_comment',post_id=post[0])}}" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Name ..."
+                    value={{session['uname'].split('@')[0]}}>
             </div>
-            <div class="post-body">
-                <p>{{post[2]}}</p>
+            <div class=" form-group">
+                <label for="comment">Comment</label>
+                <input type="text" class="form-control" name="comment" id="comment" placeholder="Comment ...">
             </div>
-            <div class="comments">
-                <h4>Comments</h4>
-                <hr>
-                {%for comment in comments%}
-                <div class="row">
-                    <div class="comment">
-                        <h5><strong>{{comment[1]}}::&nbsp;&nbsp;</strong>{{comment[2]}}</h5>
-                    </div>
-                    {% if session['loggedin']%}
-                    {%if comment[4] == session['id']%}
-                    <div class="del">
-                        <a href="{{url_for('delete_comment',post_id=comment[3],comment_id=comment[0])}}">
-                            <button type="button" class="btn btn-danger btn-sm">Delete</button>
-                        </a>
-                    </div>
-                    {%endif%}
-                    {%endif%}
-                </div>
-                {%endfor%}
+            <div class="form-group">
+                <input type="submit" value="Post Comment" class="btn btn-primary sub">
             </div>
-            <div class="comments-form">
-                <h5>Leave a comment</h5>
-                <hr>
-                {%if session['loggedin']%}
-                <form action="{{url_for('post_comment',post_id=post[0])}}" method="post">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Name ..."
-                            value={{session['uname'].split('@')[0]}}>
-                    </div>
-                    <div class=" form-group">
-                        <label for="comment">Comment</label>
-                        <input type="text" class="form-control" name="comment" id="comment" placeholder="Comment ...">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Post Comment" class="btn btn-primary sub">
-                    </div>
-                </form>
-                {%else%}
-                <h6>Login to leave a comment</h6>
-                {%endif%}
-            </div>
-        </div>
-
+        </form>
+        {%else%}
+        <h6>Login to leave a comment</h6>
+        {%endif%}
     </div>
-
-</body>
-
-</html>
+</div>
+{% endblock content%}

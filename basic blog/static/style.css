@@ -1,0 +1,322 @@
+/* base.html css */
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg stroke='%23CCC' stroke-width='0' %3E%3Crect fill='%23F5F5F5' x='-60' y='-60' width='110' height='240'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: auto auto;
+}
+
+#content-div {
+    margin-left: 300px;
+}
+
+.session {
+    color: rgb(85, 83, 83);
+    font-weight: 100;
+    flex: 1;
+    text-align: center;
+    padding-bottom: 0px
+}
+
+.list {
+    justify-content: space-around;
+    flex: 8;
+
+}
+
+.list ul {
+    list-style: none;
+}
+
+.list ul a {
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.blog {
+    padding: 5vh;
+    text-align: center;
+    flex: 1;
+}
+
+.blog h4 a {
+    letter-spacing: 1.5px;
+}
+
+#sidebar {
+    background-color: #E57373;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+#sidebar h4 a {
+    text-decoration: none;
+    color: white
+}
+
+@media (min-width: 768px) {
+    #sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 300px;
+        height: 100%;
+        padding-top: 30px;
+    }
+}
+
+
+
+/* index.html css */
+
+.container {
+    width: 100%;
+    height: 100%;
+    margin: 0px 0px 0px 0px;
+    padding: 80px;
+}
+
+.row {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    background-color: rgb(255, 243, 243);
+    width: auto;
+    height: auto;
+    border-radius: 5vh;
+    margin: 5vh;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    padding: 2vh 0vh;
+
+}
+
+.post {
+    flex: 2;
+}
+
+
+.post h4 a {
+    text-decoration: none;
+    text-transform: capitalize;
+}
+
+.uname {
+    padding-top: 2vh;
+    flex: 1;
+    color: rgb(85, 83, 83)
+}
+
+
+
+
+
+
+
+
+/* create_post.html css */
+
+.post-div {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    border-radius: 5px;
+    padding: 40px;
+    background-color: rgb(238, 237, 237);
+
+}
+
+
+
+
+
+
+
+
+/* show_post.html css */
+
+.post-head {
+    margin-bottom: 5vh;
+    font-weight: 100 !important;
+    text-align: center;
+}
+
+.post-head h1 {
+    letter-spacing: 1.5px;
+    text-transform: capitalize;
+}
+
+.post-body p {
+    word-spacing: 4px;
+    letter-spacing: 2px;
+    font-size: 18px;
+    font-weight: 200;
+    padding-bottom: 3vh;
+    text-align: justify
+}
+
+P.drop-cap:first-letter {
+    font-size: 4.5em;
+    float: left;
+    margin-top: .15em;
+}
+
+.whome {
+    display: flex;
+    margin-bottom: 5vh;
+}
+
+.at {
+    flex: 1;
+    text-align: left;
+}
+
+span {
+    padding: 2vh;
+    background-color: rgb(236, 225, 176);
+    border-radius: 5vh;
+    letter-spacing: 1.5px
+}
+
+.by {
+    flex: 1;
+    text-align: right;
+}
+
+.actions {
+    display: flex;
+}
+
+.action-head {
+    flex: 2;
+}
+
+.action-buttons {
+    flex: 1;
+    text-align: right;
+    margin-left: 5vh;
+}
+
+.action-buttons a {
+    margin-left: 2vh;
+}
+
+.comment-row {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    /* background-color: rgb(238, 237, 237); */
+    background-color: rgb(255, 243, 243);
+    width: auto;
+    min-height: 8vh;
+    border-radius: 5vh;
+    margin: 5vh;
+    align-items: center;
+    display: flex;
+    padding-left: 5vh;
+}
+
+.comment {
+    flex: 5;
+}
+
+.del {
+    flex: 1;
+}
+
+.comments {
+    margin: 5vh;
+}
+
+.comments-form {
+    margin: 5vh;
+    padding: 5vh;
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    background-color: rgb(255, 243, 243);
+}
+
+
+.post-div h4 {
+    margin: 5vh;
+
+}
+
+.sub {
+    margin-top: 3vh;
+}
+
+label {
+    font-size: 16px;
+}
+
+
+
+
+
+
+/* login.html css */
+
+
+
+.login-div {
+    margin-top: 20%;
+    height: 290px;
+    width: 320px;
+    padding: 20px;
+    background-color: rgb(255, 243, 243);
+
+}
+
+.login-div h1 {
+    font-size: 22px;
+    text-align: center;
+}
+
+.login-div {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    border-radius: 5px;
+}
+
+.container-register {
+    margin-top: 5%;
+    margin-left: 25%;
+}
+
+
+
+/* signup.html css */
+
+
+.signup-div {
+    margin-top: 20%;
+    height: 290px;
+    width: 320px;
+    padding: 20px;
+    background-color: rgb(255, 243, 243);
+
+}
+
+.signup-div h1 {
+    font-size: 22px;
+    text-align: center;
+}
+
+.signup-div {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    border-radius: 5px;
+}
