@@ -4,7 +4,7 @@ from db_config import mysql
 from flask import Flask, url_for
 from flask import flash, render_template, request, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import get_debug_queries
+# from flask_sqlalchemy import get_debug_queries
 
 @app.route("/login")
 def login():
@@ -263,6 +263,64 @@ def logout():
    # Redirect to login page
    return redirect(url_for('index'))
 
+@app.route('/users')
+def users():
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT users.id, users.email, count( posts.id ) AS no_of_posts, users.created_at FROM users LEFT JOIN posts ON users.id = posts.user_id GROUP BY posts.user_id ORDER BY 4 DESC")
+        users = cursor.fetchall()
+        return render_template("users.html", users=users)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/view_user/<int:id>')
+def view_user(id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT posts.id, posts.title, posts.content, count(comments.id) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY comments.post_id",id)
+        user_posts = cursor.fetchall()
+        cursor.execute("SELECT * from users WHERE id = %s", id)
+        user = cursor.fetchone()
+        return render_template("view_user.html",user_posts = user_posts,user = user)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/profile/<int:id>')
+def profile(id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM users WHERE id = %s",id)
+        user_profile = cursor.fetchone()
+        cursor.execute("SELECT posts.id, posts.title, posts.content, count(comments.id) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY comments.post_id",id)
+        user_posts = cursor.fetchall()
+        cursor.execute("SELECT comments.id, comments.name, comments.comment, posts.id as post_id, posts.title, comments.created_at FROM comments LEFT JOIN posts ON posts.id = comments.post_id WHERE comments.user_id = %s",id)
+        user_comments = cursor.fetchall()
+        cursor.execute("SELECT count(id) as no_of_posts FROM posts WHERE user_id = %s",id)
+        user_no_posts = cursor.fetchone()
+        cursor.execute("SELECT count(id) as no_of_comments FROM comments WHERE user_id = %s",id)
+        user_no_comments = cursor.fetchone()
+        return render_template("profile.html",user_posts = user_posts,user_profile = user_profile,user_comments = user_comments,user_no_posts = user_no_posts,user_no_comments=user_no_comments)
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
+    return render_template('profile.html')
 # def sql_debug(response):
 #     queries = list(get_debug_queries())
 #     query_str = ''

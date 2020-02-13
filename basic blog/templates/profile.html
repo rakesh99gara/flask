@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>{{user_profile.email.split('@')[0]}}'s Profile</h1>
+    <hr>
+    <div class="profile-details-header">
+        <div class="profile-details">
+            <p class="email">Email :: <strong>{{user_profile.email}}</strong></p>
+            <p class="created-on">Created On :: <strong>{{user_profile.created_at}}</strong></p>
+            <p class="updated-on">Updated On :: <strong>{{user_profile.updated_at}}</strong></p>
+        </div>
+        <div class="change-profile">
+            <strong>
+                <p>Change profile settings</p>
+            </strong>
+            <a href="">Change</a>
+        </div>
+    </div>
+    <hr>
+    <div class="profile-content">
+        <div class="profile-posts">
+            <div class="profile-posts-head">
+                <p>No. of Posts <span>{{user_no_posts.no_of_posts}}</span>
+                </p>
+            </div>
+            {% if user_posts|length > 0 %}
+            {% for user_post in user_posts %}
+            <div class="profile-posts-row">
+                <h6>{{user_post.title}}</h6>
+                <p>Created on :: {{user_post.created_at}}</p>
+                <p>Updated on :: {{user_post.updated_at}}</p>
+                <p>No. of Comments :: {{user_post.no_of_comments}}</p>
+            </div>
+            <hr>
+            {% endfor %}
+            {% else %}
+            <div class="profile-posts-row">
+                <h6>No posts yet :( </h6>
+            </div>
+            {% endif %}
+        </div>
+        <div class="profile-comments">
+            <div class="profile-comments-head">
+                <p>No. of Comments <span>{{user_no_comments.no_of_comments}}</span>
+                </p>
+            </div>
+            {% if user_comments|length > 0 %}
+            {% for user_comment in user_comments %}
+            <div class="profile-comments-row">
+                <h6>{{user_comment.comment}}</h6>
+                <p>On post :: {{user_comment.title}}</p>
+                <p>Commented on :: {{user_comment.created_at}}</p>
+            </div>
+            <hr>
+            {% endfor %}
+            {% else %}
+
+            {% endif %}
+
+        </div>
+    </div>
+    <hr>
+
+    <p>{{user_profile}}</p>
+    <p>{{user_posts}}</p>
+    <p>{{user_comments}}</p>
+</div>
+
+{% endblock content%}

@@ -32,7 +32,8 @@
     <div class="comments">
         <h4>Comments</h4>
         <hr>
-        {%for comment in comments%}
+        {% if comments|count > 0 %}
+        {% for comment in comments %}
         <div class="comment-row">
             <div class="comment">
                 <h5><strong>{{comment[1]}}::&nbsp;&nbsp;</strong>{{comment[2]}}</h5>
@@ -47,7 +48,10 @@
             {%endif%}
             {%endif%}
         </div>
-        {%endfor%}
+        {% endfor %}
+        {% else %}
+        <h6>No Comments Yet :(</h6>
+        {% endif %}
         <hr>
     </div>
     <div class="comments-form">

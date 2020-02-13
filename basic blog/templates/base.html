@@ -28,16 +28,20 @@
             <ul>
                 {% if session['loggedin']%}
                 <li><a href="/new">Create New Post</a></li>
+                <li><a href="{{url_for('profile',id=session['id'])}}">My Profile</a></li>
                 <li><a href="/logout">Logout</a></li>
                 {% else %}
                 <li><a href="/login">Login</a></li>
                 <li><a href="/signup">SignUp</a></li>
                 {% endif %}
+                <li><a href="/users">Users</a></li>
             </ul>
         </div>
         <div class="session">
             {% if session['loggedin']%}
-            <p>{{session['uname'].split('@')[0]}}</p>
+            <a href="{{url_for('profile',id=session['id'])}}">
+                <p>{{session['uname'].split('@')[0]}}</p>
+            </a>
             {%endif%}
         </div>
     </div>

@@ -19,13 +19,18 @@ body {
     font-weight: 100;
     flex: 1;
     text-align: center;
-    padding-bottom: 0px
+    padding-bottom: 0px;
+}
+
+.session a {
+    text-decoration: none;
+    color: rgb(85, 83, 83);
+
 }
 
 .list {
     justify-content: space-around;
     flex: 8;
-
 }
 
 .list ul {
@@ -48,17 +53,16 @@ body {
 }
 
 #sidebar {
-    background-color: #E57373;
+    background-color: rgb(229, 115, 115);
     padding: 15px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-
 }
 
 #sidebar h4 a {
     text-decoration: none;
-    color: white
+    color: white;
 }
 
 @media (min-width: 768px) {
@@ -71,8 +75,6 @@ body {
         padding-top: 30px;
     }
 }
-
-
 
 /* index.html css */
 
@@ -97,13 +99,11 @@ body {
     align-items: center;
     display: flex;
     padding: 2vh 0vh;
-
 }
 
 .post {
     flex: 2;
 }
-
 
 .post h4 a {
     text-decoration: none;
@@ -113,15 +113,8 @@ body {
 .uname {
     padding-top: 2vh;
     flex: 1;
-    color: rgb(85, 83, 83)
+    color: rgb(85, 83, 83);
 }
-
-
-
-
-
-
-
 
 /* create_post.html css */
 
@@ -132,15 +125,7 @@ body {
     border-radius: 5px;
     padding: 40px;
     background-color: rgb(238, 237, 237);
-
 }
-
-
-
-
-
-
-
 
 /* show_post.html css */
 
@@ -161,7 +146,7 @@ body {
     font-size: 18px;
     font-weight: 200;
     padding-bottom: 3vh;
-    text-align: justify
+    text-align: justify;
 }
 
 P.drop-cap:first-letter {
@@ -184,7 +169,7 @@ span {
     padding: 2vh;
     background-color: rgb(236, 225, 176);
     border-radius: 5vh;
-    letter-spacing: 1.5px
+    letter-spacing: 1.5px;
 }
 
 .by {
@@ -246,10 +231,8 @@ span {
     background-color: rgb(255, 243, 243);
 }
 
-
 .post-div h4 {
     margin: 5vh;
-
 }
 
 .sub {
@@ -260,14 +243,7 @@ label {
     font-size: 16px;
 }
 
-
-
-
-
-
 /* login.html css */
-
-
 
 .login-div {
     margin-top: 20%;
@@ -275,7 +251,6 @@ label {
     width: 320px;
     padding: 20px;
     background-color: rgb(255, 243, 243);
-
 }
 
 .login-div h1 {
@@ -295,10 +270,7 @@ label {
     margin-left: 25%;
 }
 
-
-
 /* signup.html css */
-
 
 .signup-div {
     margin-top: 20%;
@@ -306,7 +278,6 @@ label {
     width: 320px;
     padding: 20px;
     background-color: rgb(255, 243, 243);
-
 }
 
 .signup-div h1 {
@@ -319,4 +290,152 @@ label {
         0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
         0 100px 80px rgba(0, 0, 0, 0.07);
     border-radius: 5px;
+}
+
+/* users.html  css */
+.user-row {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    background-color: rgb(255, 243, 243);
+    width: auto;
+    height: auto;
+    border-radius: 5vh;
+    margin: 5vh;
+    padding: 2vh 0vh;
+}
+
+.user-head {
+    text-align: center;
+}
+
+.user-head a {
+    text-decoration: none;
+}
+
+.user-head h3 {
+    font-size: 30px;
+    font-weight: 200;
+}
+
+.user-foot {
+    display: flex;
+}
+
+.user-at {
+    flex: 1;
+    text-align: left;
+    padding-left: 2vh;
+}
+
+.user-posts-count {
+    flex: 1;
+    text-align: right;
+    padding-right: 2vh;
+}
+
+
+/* view_user.html css */
+
+.user-post {
+    box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.02), 0 6.7px 5.3px rgba(0, 0, 0, 0.028),
+        0 12.5px 10px rgba(0, 0, 0, 0.035), 0 22.3px 17.9px rgba(0, 0, 0, 0.042), 0 41.8px 33.4px rgba(0, 0, 0, 0.05),
+        0 100px 80px rgba(0, 0, 0, 0.07);
+    background-color: rgb(255, 243, 243);
+    width: auto;
+    height: auto;
+    border-radius: 5vh;
+    margin: 5vh;
+    padding: 2vh 5vh;
+}
+
+.post-foot {
+    display: flex;
+}
+
+.create_at {
+    flex: 1;
+    text-align: left;
+}
+
+.update_at {
+    flex: 1;
+    text-align: center;
+}
+
+.no-comments {
+    flex: 1;
+    text-align: right;
+}
+
+.show-some {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 20px;
+    max-height: 42px;
+
+    /* The number of lines to be displayed */
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.post-head h4 {
+    text-transform: capitalize;
+}
+
+/* profile.html css */
+.profile-details-header {
+    display: flex;
+    height: auto;
+}
+
+.profile-details {
+    flex: 1;
+}
+
+.change-profile {
+    flex: 1;
+    text-align: center;
+}
+
+.profile-content {
+    display: flex;
+}
+
+.profile-posts {
+    background-color: #dde9da;
+    flex: 1;
+    margin: 1vh;
+
+}
+
+.profile-comments {
+    flex: 1;
+    background-color: #dde9da;
+    margin: 1vh;
+}
+
+.profile-posts-head,
+.profile-comments-head {
+    background-color: rgb(100, 97, 93);
+    padding: 2vh;
+    text-align: center;
+}
+
+.profile-posts-head p,
+.profile-comments-head p {
+    color: floralwhite;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.profile-posts-row,
+.profile-comments-row {
+    padding: 2vh;
+}
+
+.profile-posts-row:hover,
+.profile-comments-row:hover {
+    background-color: #ffffff
 }
