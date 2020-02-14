@@ -8,8 +8,8 @@
         <p class="drop-cap">{{post[2]}}</p>
     </div>
     <div class="whome">
-        <div class='at'><span>Posted at:: <strong>{{post[4]}}</strong></span></div>
-        <div class='by'><span>By:: <strong>{{user[1].split('@')[0]}}</strong></span></div>
+        <div class='at'><span class="post-a">Posted at:: <strong>{{post[4]}}</strong></span></div>
+        <div class='by'><span class="post-b">By:: <strong>{{user[1].split('@')[0]}}</strong></span></div>
     </div>
     <hr>
     {% if session['loggedin']%}
@@ -23,7 +23,8 @@
                 <button type="button" class="btn btn-info btn-sm">Edit</button>
             </a>
             <a href="{{url_for('delete_post',id=post[0])}}">
-                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                <button type="button" class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure ?')">Delete</button>
             </a>
         </div>
     </div>
@@ -42,7 +43,8 @@
             {%if comment[4] == session['id']%}
             <div class="del">
                 <a href="{{url_for('delete_comment',post_id=comment[3],comment_id=comment[0])}}">
-                    <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    <button type="button" class="btn btn-danger btn-sm"
+                        onclick=" return confirm('Are you sure ?')">Delete</button>
                 </a>
             </div>
             {%endif%}

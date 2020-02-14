@@ -16,39 +16,42 @@ def a():
 
 @app.route("/start_session", methods=["POST"])
 def start_session():
-    msg = ""
+    error = ""
     conn = None
     cursor = None
-    if (
-        request.method == "POST"
-        and "email" in request.form
-        and "password" in request.form
-    ):
-        _email = request.form["email"]
-        _password = request.form["password"]
-        _hashed_password = generate_password_hash(_password)
-        sql = "SELECT * FROM users WHERE email = %s"
-        data = (_email)
-        conn = mysql.connect()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute(sql,data)
-        account = cursor.fetchone()
-        if check_password_hash(account['password'],_password):
-            if account:
-                session["loggedin"] = True
-                session["id"] = account["id"]
-                session["uname"] = account["email"]
-                # session['username'] = account['username']
-                # Redirect to home page
-                msg = "Login successfull"
-                return redirect(url_for('index'))
-
-        else:
-            # Account doesnt exist or username/password incorrect
-            msg = "Incorrect username/password!"
-    # Show the login form with message (if any)
-            return render_template('login.html',msg = msg)
-
+    try:
+        if (
+            request.method == "POST"
+            and "email" in request.form
+            and "password" in request.form
+        ):
+            _email = request.form["email"]
+            _password = request.form["password"]
+            _hashed_password = generate_password_hash(_password)
+            sql = "SELECT * FROM users WHERE email = %s"
+            data = (_email)
+            conn = mysql.connect()
+            cursor = conn.cursor(pymysql.cursors.DictCursor)
+            cursor.execute(sql,data)
+            account = cursor.fetchone()
+            if check_password_hash(account['password'],_password):
+                if account:
+                    session["loggedin"] = True
+                    session["id"] = account["id"]
+                    session["uname"] = account["email"]
+                    return redirect(url_for('index'))
+            else:
+                # Account doesnt exist or username/password incorrect
+                error = "Incorrect username/password!"
+        # Show the login form with message (if any)
+                return render_template('login.html',error = error)
+    except Exception as e:
+        print(e)
+        error = "Incorrect username/password!"
+        return render_template('login.html',error = error)
+    finally:
+        conn.close()
+        cursor.close()
 
 @app.route("/signup")
 def signup():
@@ -70,12 +73,12 @@ def register_user():
             cursor = conn.cursor()
             cursor.execute(sql, data)
             conn.commit()
-            msg = "SignUp successfull. Login to proceed"
-            return render_template('login.html',msg=msg)
+            success = "SignUp successfull. Login to proceed"
+            return render_template('login.html',success=success)
     except Exception as e:
         print(e)
-        msg = "Email already exists"
-        return render_template('signup.html',msg=msg)
+        error = "Email already exists"
+        return render_template('signup.html',error=error)
     finally:
         cursor.close()
         conn.close()
@@ -103,7 +106,7 @@ def create_post():
     if session['loggedin']:
         return render_template("create_post.html")
     else:
-        return render_template('login.html',msg="Login to proceed")
+        return render_template('login.html',error="Login to proceed")
 
 
 
@@ -270,7 +273,7 @@ def users():
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT users.id, users.email, count( posts.id ) AS no_of_posts, users.created_at FROM users LEFT JOIN posts ON users.id = posts.user_id GROUP BY posts.user_id ORDER BY 4 DESC")
+        cursor.execute("SELECT users.id, users.email, count( posts.id ) AS no_of_posts, users.created_at FROM users LEFT JOIN posts ON users.id = posts.user_id GROUP BY users.id ORDER BY 4 DESC ")       
         users = cursor.fetchall()
         return render_template("users.html", users=users)
     except Exception as e:
@@ -286,7 +289,7 @@ def view_user(id):
     try:
         conn = mysql.connect()
         cursor = conn.cursor(pymysql.cursors.DictCursor)
-        cursor.execute("SELECT posts.id, posts.title, posts.content, count(comments.id) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY comments.post_id",id)
+        cursor.execute("SELECT posts.id, posts.title, posts.content, count(comments.id) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY posts.id",id)
         user_posts = cursor.fetchall()
         cursor.execute("SELECT * from users WHERE id = %s", id)
         user = cursor.fetchone()
@@ -306,7 +309,7 @@ def profile(id):
         cursor = conn.cursor(pymysql.cursors.DictCursor)
         cursor.execute("SELECT * FROM users WHERE id = %s",id)
         user_profile = cursor.fetchone()
-        cursor.execute("SELECT posts.id, posts.title, posts.content, count(comments.id) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY comments.post_id",id)
+        cursor.execute("SELECT posts.id, posts.title, posts.content, count( comments.id ) AS no_of_comments, posts.created_at, posts.updated_at FROM posts LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.user_id = %s GROUP BY posts.id",id)
         user_posts = cursor.fetchall()
         cursor.execute("SELECT comments.id, comments.name, comments.comment, posts.id as post_id, posts.title, comments.created_at FROM comments LEFT JOIN posts ON posts.id = comments.post_id WHERE comments.user_id = %s",id)
         user_comments = cursor.fetchall()
@@ -321,6 +324,131 @@ def profile(id):
         cursor.close()
         conn.close()
     return render_template('profile.html')
+
+@app.route('/change_profile/<int:id>')    
+def change_profile(id):
+    conn = None
+    cursor = None
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("SELECT * FROM users WHERE id = %s",id)
+        user_details = cursor.fetchone()
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()        
+    return render_template('change_profile.html',user_details = user_details)
+
+@app.route('/update_profile/<int:id>',methods=['POST'])
+def update_profile(id):
+    conn = None
+    cursor = None
+    if (
+        request.method == "POST"
+        and "email" in request.form
+        and "current_password" in request.form
+    ):
+        _email = request.form["email"]
+        _new_password = request.form["new_password"]
+        _current_password = request.form['current_password']
+        _hashed_current_password = generate_password_hash(_current_password)
+        _hashed_new_password = generate_password_hash(_new_password)
+        sql = "SELECT * FROM users WHERE id = %s"
+        data = (id)
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(sql,data)
+        account = cursor.fetchone()
+        if check_password_hash(account['password'],_current_password):
+            if account:
+                if _new_password != '':
+                    try:
+                        sql = "UPDATE users SET email = %s, password = %s where id = %s"
+                        data = (_email, _hashed_new_password,id)
+                        conn = mysql.connect()
+                        cursor = conn.cursor()
+                        cursor.execute(sql, data)
+                        conn.commit()
+                        sql = "SELECT * FROM users WHERE id = %s"
+                        data = (id)
+                        cursor.execute(sql,data)
+                        account = cursor.fetchone()
+                        session["loggedin"] = True
+                        session["id"] = account[0]
+                        session["uname"] = account[1]
+                        return redirect(url_for('profile',id=id))
+                    except Exception as e:
+                        print(e)
+                        return render_template("change_profile.html",user_details = account,error="Email already Exists")
+                    finally:
+                        conn.close()
+                        cursor.close()
+                else:
+                    try:
+                        sql = "UPDATE users SET email = %s, password = %s where id = %s"
+                        data = (_email, _hashed_current_password,id)
+                        conn = mysql.connect()
+                        cursor = conn.cursor()
+                        cursor.execute(sql, data)
+                        conn.commit()
+                        sql = "SELECT * FROM users WHERE id = %s"
+                        data = (id)
+                        cursor.execute(sql,data)
+                        account = cursor.fetchone()
+                        session["loggedin"] = True
+                        session["id"] = account[0]
+                        session["uname"] = account[1]
+                    except Exception as e:
+                        print(e)
+                        return render_template("change_profile.html",user_details = account,error="Email already Exists")
+                    finally:
+                        conn.close()
+                        cursor.close()
+
+        else:
+            error = "Incorrect current password!"
+            return render_template('change_profile.html',user_details = account,error = error)
+    return redirect(url_for('profile',id=id))
+
+
+@app.route('/delete_profile/<int:id>')
+def delete_profile(id):
+    conn = None
+    cursor = None
+    try:
+            sql = "SELECT * FROM users WHERE id = %s"
+            data = (id)
+            conn = mysql.connect()
+            cursor = conn.cursor(pymysql.cursors.DictCursor)
+            cursor.execute(sql,data)
+            account = cursor.fetchone()
+            if account:
+                sql = "DELETE FROM comments WHERE post_id IN (  SELECT id FROM posts WHERE user_id = %s )"
+                data = (id)
+                cursor.execute(sql,data)
+                conn.commit()
+                sql = "DELETE FROM posts WHERE user_id = %s"
+                data = (id)
+                cursor.execute(sql,data)
+                conn.commit()
+                sql = "DELETE FROM users WHERE id = %s"
+                data = (id)
+                cursor.execute(sql,data)
+                conn.commit()
+                session.pop('loggedin', None)
+                session.pop('id', None)
+                session.pop('uname', None)
+                return redirect(url_for('index',success = "Profile deleted Successfully"))
+    except Exception as e:
+        print(e)
+    finally:
+        conn.close()
+        cursor.close()
+
+
+
 # def sql_debug(response):
 #     queries = list(get_debug_queries())
 #     query_str = ''

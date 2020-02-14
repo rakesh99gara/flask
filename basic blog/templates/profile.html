@@ -13,7 +13,7 @@
             <strong>
                 <p>Change profile settings</p>
             </strong>
-            <a href="">Change</a>
+            <a href="{{url_for('change_profile',id=user_profile['id'])}}">Change</a>
         </div>
     </div>
     <hr>
@@ -26,7 +26,9 @@
             {% if user_posts|length > 0 %}
             {% for user_post in user_posts %}
             <div class="profile-posts-row">
-                <h6>{{user_post.title}}</h6>
+                <a href="{{url_for('show',id=user_post['id'])}}">
+                    <h5 class="user-post-title">{{user_post.title}}</h5>
+                </a>
                 <p>Created on :: {{user_post.created_at}}</p>
                 <p>Updated on :: {{user_post.updated_at}}</p>
                 <p>No. of Comments :: {{user_post.no_of_comments}}</p>
@@ -35,7 +37,7 @@
             {% endfor %}
             {% else %}
             <div class="profile-posts-row">
-                <h6>No posts yet :( </h6>
+                <h5>No posts yet :( </h5>
             </div>
             {% endif %}
         </div>
@@ -47,23 +49,22 @@
             {% if user_comments|length > 0 %}
             {% for user_comment in user_comments %}
             <div class="profile-comments-row">
-                <h6>{{user_comment.comment}}</h6>
+                <a href="{{url_for('show',id=user_comment['post_id'])}}">
+                    <h5 class="user-comment">{{user_comment.comment}}</h5>
+                </a>
                 <p>On post :: {{user_comment.title}}</p>
                 <p>Commented on :: {{user_comment.created_at}}</p>
             </div>
             <hr>
             {% endfor %}
             {% else %}
-
+            <div class="profile-comments-row">
+                <h5>No Comments yet :(</h5>
+            </div>
             {% endif %}
-
         </div>
     </div>
     <hr>
-
-    <p>{{user_profile}}</p>
-    <p>{{user_posts}}</p>
-    <p>{{user_comments}}</p>
 </div>
 
 {% endblock content%}

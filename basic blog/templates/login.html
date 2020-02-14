@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
+{% if error|length > 0 %}
 <div class="error">
-    <h4>{{msg}}</h4>
+    <div class="closebtn" onclick="this.parentElement.style.display='none';">&times;</div>
+    <h4>{{error}}</h4>
 </div>
+{% endif %}
+{% if success|length > 0 %}
+<div class="success">
+    <div class="closebtn" onclick="this.parentElement.style.display='none';">&times;</div>
+    <h4>{{success}}</h4>
+</div>
+{% endif %}
 <div class="container-register">
     <div class="login-div">
         <h1>Login Here</h1>
