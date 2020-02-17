@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    {% if success|length > 0 %}
+    <div class="success">
+        <div class="closebtn" onclick="this.parentElement.style.display='none';">&times;</div>
+        <h4>{{success}}</h4>
+    </div>
+    {% endif %}
+    <h1>Recent Posts</h1>
+    <hr>
+    {% for row in rows: %}
+    <div class="row">
+        <div class="post">
+            <h4><a href="{{url_for('posts.show',id=row['id'])}}">{{row.title}}</a></h4>
+        </div>
+        <div class="uname">
+            <p>--&nbsp;&nbsp;{{row.email.split('@')[0]}}</p>
+        </div>
+
+    </div>
+    {%endfor%}
+</div>
+{% endblock content %}

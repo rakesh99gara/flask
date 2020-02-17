@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>All Users</h1>
+    <hr>
+    {% for user in users %}
+    <div class="user-row">
+        <div class="user-head">
+            <a href="{{url_for('users.view_user',id=user['id'])}}">
+                <h3>{{user.email.split('@')[0]}}</h3>
+            </a>
+        </div>
+        <div class="user-foot">
+            <div class="user-at">
+                <div class="create">Created at :: <strong>{{user.created_at}}</strong></div>
+            </div>
+            <div class="user-posts-count">
+                <div class="no-posts">No. of Posts :: <strong>{{user.no_of_posts}}</strong></div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}

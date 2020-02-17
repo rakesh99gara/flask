@@ -1,0 +1,25 @@
+{% extends "base.html"%}
+{% block content%}
+<div class="container">
+    <div class="post-div">
+        <h4 align="center">Edit Post</h4>
+        <form action="{{url_for('update_post',id=row['id'])}}" method="post">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" value="{{row.title}}" name="title" id="title"
+                    placeholder="Title ...">
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea name="content" class="form-control" id="content" rows="5"
+                    placeholder="Content here .....">{{row.content}}</textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="update post" class="btn btn-primary sub">
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock content%}

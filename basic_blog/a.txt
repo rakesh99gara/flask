@@ -1,0 +1,5 @@
+"SELECT posts.id, posts.title,
+ posts.content, count(comments.id) AS no_of_comments, 
+ posts.created_at, posts.updated_at FROM posts LEFT JOIN 
+ comments ON posts.id = comments.post_id 
+ GROUP BY comments.post_id",id

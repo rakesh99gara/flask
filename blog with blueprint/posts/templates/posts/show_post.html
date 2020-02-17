@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="post-head">
+        <h1>{{post[1]}}</h1>
+    </div>
+    <div class="post-body">
+        <p class="drop-cap">{{post[2]}}</p>
+    </div>
+    <div class="whome">
+        <div class='at'><span class="post-a">Posted at:: <strong>{{post[4]}}</strong></span></div>
+        <div class='by'><span class="post-b">By:: <strong>{{user[1].split('@')[0]}}</strong></span></div>
+    </div>
+    <hr>
+    {% if session['loggedin']%}
+    {% if session['id'] == post[3] %}
+    <div class="actions">
+        <div class="action-head">
+            <h5>Actions</h5>
+        </div>
+        <div class="action-buttons">
+            <a href="{{url_for('posts.edit_post',id=post[0])}}">
+                <button type="button" class="btn btn-info btn-sm">Edit</button>
+            </a>
+            <a href="{{url_for('posts.delete_post',id=post[0])}}">
+                <button type="button" class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure ?')">Delete</button>
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    <div class="comments">
+        <h4>Comments</h4>
+        <hr>
+        {% if comments|count > 0 %}
+        {% for comment in comments %}
+        <div class="comment-row">
+            <div class="comment">
+                <h5><strong>{{comment[1]}}::&nbsp;&nbsp;</strong>{{comment[2]}}</h5>
+            </div>
+            {% if session['loggedin']%}
+            {%if comment[4] == session['id']%}
+            <div class="del">
+                <a href="{{url_for('posts.delete_comment',post_id=comment[3],comment_id=comment[0])}}">
+                    <button type="button" class="btn btn-danger btn-sm"
+                        onclick=" return confirm('Are you sure ?')">Delete</button>
+                </a>
+            </div>
+            {%endif%}
+            {%endif%}
+        </div>
+        {% endfor %}
+        {% else %}
+        <h6>No Comments Yet :(</h6>
+        {% endif %}
+        <hr>
+    </div>
+    <div class="comments-form">
+        <h5>Leave a comment</h5>
+        <hr>
+        {%if session['loggedin']%}
+        <form action="{{url_for('posts.post_comment',post_id=post[0])}}" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" name="name" id="name" placeholder="Name ..."
+                    value={{session['uname'].split('@')[0]}}>
+            </div>
+            <div class=" form-group">
+                <label for="comment">Comment</label>
+                <input type="text" class="form-control" name="comment" id="comment" placeholder="Comment ...">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Post Comment" class="btn btn-primary sub">
+            </div>
+        </form>
+        {%else%}
+        <h6>Login to leave a comment</h6>
+        {%endif%}
+    </div>
+</div>
+{% endblock content%}

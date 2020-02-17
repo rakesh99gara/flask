@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h1>{{user.email.split('@')[0]}}'s Posts</h1>
+    <hr>
+    {% if user_posts|length > 0 %}
+    {% for user_post in user_posts %}
+    <div class="user-post">
+        <div class="post-head">
+            <h4>{{user_post.title}}</h4>
+        </div>
+        <div class="post-body">
+            <p class="show-some">{{user_post.content}}</p>
+            <a href="{{url_for('posts.show',id=user_post['id'])}}">Read more ... </a>
+        </div>
+        <hr>
+        <div class="post-foot">
+            <div class="create_at">created at :: {{user_post.created_at}}</div>
+            <div class="update_at">updated at :: {{user_post.updated_at}}</div>
+            <div class="no-comments">No. of comments :: {{user_post.no_of_comments}}</div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h4>No Posts Yet :(</h4>
+    {% endif %}
+
+    {% endblock content%}
